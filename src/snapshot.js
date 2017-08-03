@@ -31,10 +31,14 @@ export default (protocol, host, path, delay) => {
         }
       },
       done: (err, window) => {
-        if (!reactSnapshotRenderCalled) {
-          reject("'render' from react-snapshot was never called. Did you replace the call to ReactDOM.render()?")
-        }
-      }
+        setTimeout(function() {
+          if (reactSnapshotRenderCalled) {
+            resolve(window);
+          } else {
+            reject("'render' from react-snapshot was never called. Did you replace the call to ReactDOM.render()?");
+          }
+        }, delay);
+	  }
     })
   })
 }
